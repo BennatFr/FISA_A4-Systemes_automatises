@@ -1,0 +1,6 @@
+{
+    "info": "Description || Rename this file to config.json",
+    "url": "http://XX.XX.XX.XX",
+    "api_key": "KEY",
+    "gcode_folder": "./gcode/"
+}
