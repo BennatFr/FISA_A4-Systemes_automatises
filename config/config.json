@@ -1,4 +1,5 @@
 {
+    "info": "C'est le fichier de configuration de l'imprimante 3D avec le Raspberry vert",
     "url": "http://10.169.140.109",
     "api_key": "In6wFssVEp7XXFeaLg69ryS9jYoysNGpwlfZlG-czb0",
     "gcode_folder": "./gcode/"

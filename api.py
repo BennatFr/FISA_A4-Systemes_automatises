@@ -2,7 +2,7 @@ import requests
 import json
 
 # Charger la configuration
-with open("config.json", "r") as config_file:
+with open("config/config.json", "r") as config_file:
     CONFIG = json.load(config_file)
 
 # GLOBAL VARIABLES

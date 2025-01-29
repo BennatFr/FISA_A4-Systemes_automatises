@@ -3,7 +3,7 @@ import json
 
 
 # Charger la configuration
-with open("config.json", "r") as config_file:
+with open("config/config.json", "r") as config_file:
     CONFIG = json.load(config_file)
 
 def compute_pixel_to_mm_transformation(image_coords, real_coords):

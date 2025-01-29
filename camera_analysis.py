@@ -6,7 +6,7 @@ from api import CONFIG
 SNAPSHOT_URL = CONFIG.get("url", "").rstrip("/") + "/webcam/?action=snapshot"
 
 
-def detect_screws(image_path, annotated_path="screws_detected.jpg"):
+def detect_screws(image_path, annotated_path="img/screws_detected.jpg"):
     """
     Détecte les vis (cercles) sur l'image et sauvegarde une copie annotée.
     :param image_path: Chemin vers l'image capturée.
@@ -56,7 +56,7 @@ def detect_screws(image_path, annotated_path="screws_detected.jpg"):
         return None
 
 
-def capture_image(save_path="snapshot.jpg"):
+def capture_image(save_path="img/snapshot.jpg"):
     """
     Capture une image de la caméra connectée à OctoPrint.
     :param save_path: Chemin pour sauvegarder l'image.
@@ -76,7 +76,7 @@ def capture_image(save_path="snapshot.jpg"):
         print(f"Erreur lors de la requête à la caméra : {e}")
         return None
 
-def analyze_image(image_path, annotated_path="annotated_image.jpg"):
+def analyze_image(image_path, annotated_path="img/annotated_image.jpg"):
     """
     Analyse l'image pour détecter les coins et sauvegarde une copie annotée.
     :param image_path: Chemin vers l'image capturée.
