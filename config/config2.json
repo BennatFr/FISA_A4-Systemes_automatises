@@ -1,6 +1,0 @@
-{
-    "info": "C'est le fichier de configuration de l'imprimante 3D avec le Raspberry blue",
-    "url": "http://10.169.140.108",
-    "api_key": "HQXRheeCjdimem7uD2a8U3jC4vCMnajFkR4q1Te5ptc",
-    "gcode_folder": "./gcode/"
-}
