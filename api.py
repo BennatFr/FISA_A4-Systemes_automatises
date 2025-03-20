@@ -43,6 +43,7 @@ def is_printer_connected():
     headers = {"X-Api-Key": API_KEY}
 
     try:
+        print("Checking printer connection to ", url)
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             state = response.json().get("state", {}).get("flags", {})

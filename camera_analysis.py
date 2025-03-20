@@ -32,7 +32,7 @@ def detect_screws(image_path, annotated_path="img/screws_detected.jpg"):
         # Détection des cercles avec la transformation de Hough
         circles = cv2.HoughCircles(
             blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=200,
-            param1=40, param2=16, minRadius=6, maxRadius=10
+            param1=60, param2=16, minRadius=4, maxRadius=10
         )
 
         # Annoter l'image avec les cercles détectés

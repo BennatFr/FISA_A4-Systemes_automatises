@@ -1,5 +1,6 @@
 import cv2
 import json
+import numpy as np
 
 
 # Charger la configuration
@@ -51,7 +52,7 @@ def order_screws(screws_image_coords):
     # Retourner les vis dans l'ordre : Top left, Top right, Bottom left, Bottom right
     return [top_screws[0], top_screws[1], bottom_screws[0], bottom_screws[1]]
 
-def adjust_corners_for_interior(corners, offset=5):
+def adjust_corners_for_interior(corners, offset=2.5):
     """
     Ajuste les coins pour déplacer la buse à l'intérieur de l'objet.
     :param corners: Liste des coordonnées des coins en mm [(x1, y1), (x2, y2), ...].

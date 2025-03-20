@@ -19,7 +19,7 @@ def analyze_object_and_move():
     """
     # Positionner la buse à l'origine (G28) et déplacer à Y250
     print("Initialisation de la position de la buse...")
-    g28 = input("Appuyer sur 0 pour G28 & M92 ? : ")
+    g28 = input("Appuyer sur 0 pour G28 & M83 ? : ")
     wait_time = 4
     if(g28 == "0"):
         wait_time = 16
@@ -31,13 +31,13 @@ def analyze_object_and_move():
     # Attendre quelques secondes avant de revérifier
     time.sleep(wait_time)
 
-    print("Buse positionnée à Y250. Veuillez placer l'objet sur le plateau.")
+    print("Buse positionnée à X250 Y250. Veuillez placer l'objet sur le plateau.")
 
     # Demander une confirmation à l'utilisateur avant de capturer l'image
     input("Appuyez sur Entrée une fois que l'objet est correctement positionné.")
 
     # Capture une image
-    image_path = capture_image("snapshot.jpg")
+    image_path = capture_image("img/snapshot.jpg")
     if not image_path:
         print("Échec de la capture d'image.")
         return
@@ -54,11 +54,18 @@ def analyze_object_and_move():
 
     # Coordonnées réelles des vis (en mm, à calibrer pour ton imprimante)
     screws_real_coords = [
-        (242, 38),  # Top left
-        (72, 38),   # Top right
-        (242, 210), # Bottom left
+        (238, 38),  # Top left
+        (71.5, 38),   # Top right
+        (238, 210), # Bottom left
         (71, 208)   # Bottom right
     ]
+
+    test_screw = input("Tester les coordonnées réelles des vis appuyer sur '0' pour continuer : ")
+    if(test_screw == "0"):
+        for screw in screws_real_coords:
+            print(f"Vis réelles : {screw}")
+            send_gcode_command(f"G1 X{screw[0]} Y{screw[1]} Z10 F10000")
+            input("Appuyez sur Entrée pour continuer.")
 
     # Calculer la transformation pixel -> mm
     transform_matrix = compute_pixel_to_mm_transformation(screws_image_coords, screws_real_coords)
@@ -76,25 +83,27 @@ def analyze_object_and_move():
     print(f"Coins de l'objet (mm) : {corners_real_coords}")
 
     # Ajuster les coins pour aller à l'intérieur de l'objet
-    adjusted_corners = adjust_corners_for_interior(corners_real_coords, offset=5)
+    adjusted_corners = adjust_corners_for_interior(corners_real_coords, offset=2)
     print(f"Coins ajustés (mm) : {adjusted_corners}\n")
 
     # Aller rapidement au-dessus du premier coin ajusté
     x_first, y_first = adjusted_corners[0]
-    send_gcode_command(f"G1 X{x_first:.2f} Y{y_first:.2f} Z10 F3000")  # Déplacement rapide
+    send_gcode_command(f"G1 X{x_first:.2f} Y{y_first:.2f} Z10 F1000")  # Déplacement rapide
 
     input("Appuyez sur Entrée pour continuer et déplacer la buse aux coins de l'objet.")
 
     # Déplacer la buse aux coins ajustés de l'objet
-    extrusion_percentage = 50  # Pourcentage du trajet où E4 est activé
+    extrusion_percentage = 75  # Pourcentage du trajet où E4 est activé
+    send_gcode_command(f"G1 E0.5") # Arnarque
+    time.sleep(0.5)
 
     for idx in range(len(adjusted_corners)):
         if(idx==3):
             continue
         if(idx%2==0):
-            E_value = 4
-        else:
             E_value = 2
+        else:
+            E_value = 1
         # Point de départ
         x_start, y_start = adjusted_corners[idx]
         # Point d'arrivée (prochain coin ou retour au premier coin)
@@ -111,10 +120,13 @@ def analyze_object_and_move():
         print(f"Extrusion active jusqu'à : X={x_extrude:.2f}, Y={y_extrude:.2f}")
 
         # Compléter le déplacement sans extrusion
-        send_gcode_command(f"G1 X{x_end:.2f} Y{y_end:.2f} Z6 F200")
+        send_gcode_command(f"G1 X{x_end:.2f} Y{y_end:.2f} Z6 F400")
         print(f"Déplacement sans extrusion jusqu'à : X={x_end:.2f}, Y={y_end:.2f}")
 
+    time.sleep(2)
     send_gcode_command("G1 X250 Y250 Z50 F10000") # Retour à la position initiale
+    time.sleep(5)
+    capture_image("img/end.jpg")
 
 GCODE_FOLDER = CONFIG["gcode_folder"]
 
